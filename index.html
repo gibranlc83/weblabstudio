@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML & CSS Mastery Lab</title>
+    <style>
+        :root {
+            --bg: #f4f7f9;
+            --sidebar-bg: #ffffff;
+            --primary: #4f46e5; /* Indigo */
+            --secondary: #06b6d4; /* Cyan */
+            --text-main: #1e293b;
+            --code-bg: #1e1e1e;
+            --border: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- SIDEBAR --- */
+        aside {
+            width: 280px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .logo { 
+            font-weight: 800; 
+            font-size: 1.2rem; 
+            margin-bottom: 20px; 
+            color: var(--primary);
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 10px;
+        }
+
+        .category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #94a3b8;
+            margin: 18px 0 8px 5px;
+            letter-spacing: 1px;
+        }
+
+        .tag-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 12px;
+            text-align: left;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            color: #475569;
+            margin-bottom: 2px;
+            outline: none;
+        }
+
+        .tag-btn:hover {
+            background: #f1f5f9;
+            color: var(--primary);
+        }
+
+        .tag-btn.active {
+            background: var(--primary) !important;
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .tag-btn.active-css {
+            background: var(--secondary) !important;
+            color: white !important;
+            font-weight: 600;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main { flex: 1; display: flex; flex-direction: column; padding: 25px; gap: 20px; }
+
+        .info-card {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            border: 1px solid var(--border);
+        }
+
+        .workspace { display: flex; flex: 1; gap: 20px; min-height: 0; }
+
+        .panel {
+            flex: 1;
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: #f8fafc;
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        #code-display {
+            background: var(--code-bg);
+            color: #d4d4d4;
+            padding: 25px;
+            margin: 0;
+            flex: 1;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            overflow: auto;
+            line-height: 1.6;
+        }
+
+        #preview-area {
+            padding: 30px;
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Syntax colors */
+        .t-tag { color: #e06c75; }
+        .t-attr { color: #d19a66; }
+        .t-string { color: #98c379; }
+        .t-prop { color: #61afef; }
+        .t-val { color: #c678dd; }
+
+        /* Estilos específicos para las previsualizaciones */
+        nav.demo-nav { background: #1e293b; padding: 15px; border-radius: 8px; width: 100%; text-align: center;}
+        nav.demo-nav a { color: white; margin: 0 10px; text-decoration: none; font-size: 14px; }
+        .css-box { width: 150px; height: 150px; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; padding: 10px; }
+    </style>
+</head>
+<body>
+
+    <aside id="sidebar">
+        <div class="logo">Web Lab Studio</div>
+        
+        <div class="category">Texto & Contenido</div>
+        <button class="tag-btn active" data-id="h1" onclick="selectItem(this)">h1 - Título</button>
+        <button class="tag-btn" data-id="p" onclick="selectItem(this)">p - Párrafo</button>
+        <button class="tag-btn" data-id="b" onclick="selectItem(this)">b - Negrita</button>
+        <button class="tag-btn" data-id="a" onclick="selectItem(this)">a - Enlace</button>
+
+        <div class="category">Estructura & Multimedia</div>
+        <button class="tag-btn" data-id="div" onclick="selectItem(this)">div - Contenedor</button>
+        <button class="tag-btn" data-id="nav" onclick="selectItem(this)">nav - Navegación</button>
+        <button class="tag-btn" data-id="img" onclick="selectItem(this)">img - Imagen</button>
+        <button class="tag-btn" data-id="video" onclick="selectItem(this)">video - Video</button>
+
+        <div class="category">Listas & Formularios</div>
+        <button class="tag-btn" data-id="ul" onclick="selectItem(this)">ul - Lista</button>
+        <button class="tag-btn" data-id="button" onclick="selectItem(this)">button - Botón</button>
+        <button class="tag-btn" data-id="input" onclick="selectItem(this)">input - Entrada</button>
+
+        <div class="category">Conceptos CSS</div>
+        <button class="tag-btn css-type" data-id="css-radius" onclick="selectItem(this)">Bordes Redondeados</button>
+        <button class="tag-btn css-type" data-id="css-shadow" onclick="selectItem(this)">Sombras (Shadow)</button>
+        <button class="tag-btn css-type" data-id="css-border" onclick="selectItem(this)">Líneas y Bordes</button>
+    </aside>
+
+    <main>
+        <div class="info-card">
+            <h2 id="view-title" style="margin:0; font-size: 1.3rem;">Título</h2>
+            <p id="view-desc" style="margin:8px 0 0 0; color: #64748b; font-size: 0.95rem;">Cargando descripción...</p>
+        </div>
+
+        <div class="workspace">
+            <div class="panel">
+                <div class="panel-header" id="panel-type">CÓDIGO HTML</div>
+                <pre id="code-display"></pre>
+            </div>
+            <div class="panel">
+                <div class="panel-header">VISTA PREVIA INTERACTIVA</div>
+                <div id="preview-area"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const database = {
+            'h1': {
+                t: 'Etiqueta <h1>',
+                d: 'Es el título principal de una página. Solo debe usarse uno por documento para un buen SEO.',
+                c: '<span class="t-tag">&lt;h1&gt;</span>Mi Gran Título<span class="t-tag">&lt;/h1&gt;</span>',
+                p: '<h1>Mi Gran Título</h1>'
+            },
+            'p': {
+                t: 'Etiqueta <p>',
+                d: 'Define un párrafo. Es el bloque básico para contener texto de lectura.',
+                c: '<span class="t-tag">&lt;p&gt;</span>Aprender HTML es el primer paso.<span class="t-tag">&lt;/p&gt;</span>',
+                p: '<p>Aprender HTML es el primer paso para convertirte en desarrollador web profesional.</p>'
+            },
+            'b': {
+                t: 'Etiqueta <b>',
+                d: 'Resalta visualmente un texto en negrita sin añadir importancia semántica.',
+                c: '<span class="t-tag">&lt;b&gt;</span>Texto en negrita<span class="t-tag">&lt;/b&gt;</span>',
+                p: '<b>Texto en negrita</b>'
+            },
+            'a': {
+                t: 'Etiqueta <a>',
+                d: 'Crea enlaces. El atributo "href" define a dónde irá el usuario al hacer clic.',
+                c: '<span class="t-tag">&lt;a</span> <span class="t-attr">href=</span><span class="t-string">"#"</span><span class="t-tag">&gt;</span>Enlace de ejemplo<span class="t-tag">&lt;/a&gt;</span>',
+                p: '<a href="#" style="color:var(--primary); font-weight:bold;">Enlace de ejemplo</a>'
+            },
+            'div': {
+                t: 'Etiqueta <div>',
+                d: 'Un contenedor genérico que no tiene significado especial, usado para organizar y aplicar estilos CSS.',
+                c: '<span class="t-tag">&lt;div</span> <span class="t-attr">style=</span><span class="t-string">"background:lightgrey; padding:20px"</span><span class="t-tag">&gt;</span>\n  Contenido agrupado\n<span class="t-tag">&lt;/div&gt;</span>',
+                p: '<div style="background:#f1f5f9; padding:40px; border:2px dashed #cbd5e1; border-radius:10px; width:100%; text-align:center">Esto es un DIV contenedor</div>'
+            },
+            'nav': {
+                t: 'Etiqueta <nav>',
+                d: 'Indica una sección que contiene enlaces de navegación (menús).',
+                c: '<span class="t-tag">&lt;nav&gt;</span>\n  <span class="t-tag">&lt;a&gt;</span>Inicio<span class="t-tag">&lt;/a&gt;</span>\n  <span class="t-tag">&lt;a&gt;</span>Cursos<span class="t-tag">&lt;/a&gt;</span>\n  <span class="t-tag">&lt;a&gt;</span>Blog<span class="t-tag">&lt;/a&gt;</span>\n<span class="t-tag">&lt;/nav&gt;</span>',
+                p: '<nav class="demo-nav"><a href="#">Inicio</a><a href="#">Cursos</a><a href="#">Blog</a></nav>'
+            },
+            'img': {
+                t: 'Etiqueta <img>',
+                d: 'Inserta una imagen. "src" es la dirección de la imagen y "alt" su descripción.',
+                c: '<span class="t-tag">&lt;img</span> <span class="t-attr">src=</span><span class="t-string">"foto.jpg"</span> <span class="t-attr">alt=</span><span class="t-string">"Paisaje"</span><span class="t-tag">&gt;</span>',
+                p: '<img src="https://picsum.photos/300/180" style="border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1)">'
+            },
+            'video': {
+                t: 'Etiqueta <video>',
+                d: 'Se usa para mostrar videos. "controls" permite al usuario pausar y dar play.',
+                c: '<span class="t-tag">&lt;video</span> <span class="t-attr">controls width=</span><span class="t-string">"250"</span><span class="t-tag">&gt;</span>\n  <span class="t-tag">&lt;source</span> <span class="t-attr">src=</span><span class="t-string">"video.mp4"</span><span class="t-tag">&gt;</span>\n<span class="t-tag">&lt;/video&gt;</span>',
+                p: '<video controls width="280"><source src="https://www.w3schools.com/html/mov_bbb.mp4"></video>'
+            },
+            'ul': {
+                t: 'Etiqueta <ul>',
+                d: 'Lista desordenada (con viñetas). Cada elemento de la lista debe usar <li>.',
+                c: '<span class="t-tag">&lt;ul&gt;</span>\n  <span class="t-tag">&lt;li&gt;</span>Elemento 1<span class="t-tag">&lt;/li&gt;</span>\n<span class="t-tag">&lt;/ul&gt;</span>',
+                p: '<ul style="text-align:left"><li>HTML5</li><li>CSS3</li><li>JavaScript</li></ul>'
+            },
+            'button': {
+                t: 'Etiqueta <button>',
+                d: 'Un botón clickable que puede ejecutar acciones.',
+                c: '<span class="t-tag">&lt;button&gt;</span>Hacer Clic<span class="t-tag">&lt;/button&gt;</span>',
+                p: '<button style="padding:12px 24px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold">Hacer Clic</button>'
+            },
+            'input': {
+                t: 'Etiqueta <input>',
+                d: 'Permite al usuario introducir datos. Existen muchos tipos: text, password, checkbox...',
+                c: '<span class="t-tag">&lt;input</span> <span class="t-attr">type=</span><span class="t-string">"text"</span> <span class="t-attr">placeholder=</span><span class="t-string">"Escribe tu nombre..."</span><span class="t-tag">&gt;</span>',
+                p: '<input type="text" placeholder="Escribe tu nombre..." style="padding:10px; border:1px solid #ddd; border-radius:6px; width:250px">'
+            },
+            'css-radius': {
+                t: 'CSS: Border Radius',
+                d: 'Define qué tan redondeadas serán las esquinas de un elemento.',
+                c: '<span class="t-prop">border-radius</span>: <span class="t-val">40px</span>;',
+                p: '<div class="css-box" style="border-radius:40px">Bordes redondeados</div>'
+            },
+            'css-shadow': {
+                t: 'CSS: Box Shadow',
+                d: 'Agrega efectos de sombra al marco de un elemento.',
+                c: '<span class="t-prop">box-shadow</span>: <span class="t-val">0 20px 40px rgba(0,0,0,0.25)</span>;',
+                p: '<div class="css-box" style="box-shadow: 0 20px 40px rgba(0,0,0,0.25); background:white; color:black">Sombra de profundidad</div>'
+            },
+            'css-border': {
+                t: 'CSS: Border Style',
+                d: 'Define el grosor, el tipo de línea y el color del borde.',
+                c: '<span class="t-prop">border</span>: <span class="t-val">5px dashed #06b6d4</span>;',
+                p: '<div class="css-box" style="border: 5px dashed var(--secondary); background:transparent; color:var(--secondary)">Borde discontinuo</div>'
+            }
+        };
+
+        function selectItem(element) {
+            const allButtons = document.querySelectorAll('.tag-btn');
+            allButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('active-css');
+            });
+
+            const id = element.getAttribute('data-id');
+            const data = database[id];
+
+            if (element.classList.contains('css-type')) {
+                element.classList.add('active-css');
+                document.getElementById('panel-type').innerText = "CÓDIGO CSS";
+            } else {
+                element.classList.add('active');
+                document.getElementById('panel-type').innerText = "CÓDIGO HTML";
+            }
+
+            document.getElementById('view-title').innerText = data.t;
+            document.getElementById('view-desc').innerText = data.d;
+            document.getElementById('code-display').innerHTML = data.c;
+            document.getElementById('preview-area').innerHTML = data.p;
+        }
+
+        window.onload = () => {
+            const firstBtn = document.querySelector('[data-id="h1"]');
+            selectItem(firstBtn);
+        };
+    </script>
+</body>
+</html>
